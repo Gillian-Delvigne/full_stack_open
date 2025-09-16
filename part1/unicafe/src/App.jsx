@@ -18,7 +18,7 @@ function App() {
             <Button text="good" onClick={() => setGood(good + 1)} />
             <Button text="neutral" onClick={() => setNeutral(neutral + 1)} />
             <Button text="bad" onClick={() => setBad(bad + 1)} />
-            <Statistics
+             <Statistics
                 good={good}
                 neutral={neutral}
                 bad={bad}
