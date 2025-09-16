@@ -18,14 +18,19 @@ function App() {
             <Button text="good" onClick={() => setGood(good + 1)} />
             <Button text="neutral" onClick={() => setNeutral(neutral + 1)} />
             <Button text="bad" onClick={() => setBad(bad + 1)} />
-             <Statistics
-                good={good}
-                neutral={neutral}
-                bad={bad}
-                all={all}
-                average={average}
-                posPercent={posPercent}
-            />
+            <Header title="Statistics" />
+            {all === 0 ? (
+                "No feedback fiven"
+            ) : (
+                <Statistics
+                    good={good}
+                    neutral={neutral}
+                    bad={bad}
+                    all={all}
+                    average={average}
+                    posPercent={posPercent}
+                />
+            )}
         </div>
     );
 }
