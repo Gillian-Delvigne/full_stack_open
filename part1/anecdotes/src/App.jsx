@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "./components/Button";
+import { Header } from "./components/Header";
 
 function App() {
     const anecdotes = [
@@ -37,11 +38,19 @@ function App() {
         copy[selected] += 1;
         setVotes(copy);
     };
-    // console.log(votes[selected]);
+
+    const findMostVoted = () => {
+        return Object.keys(votes).reduce((a, b) =>
+            votes[a] > votes[b] ? a : b
+        );
+    };
+
     return (
         <div>
+            <Header title="Anecdote of the day" />
             <p>{anecdotes[selected]}</p>
-            <p>has {votes[selected]} votes</p>
+            <Header title="Anecdote with most votes" />
+            <p>{anecdotes[findMostVoted()]}</p>
             <Button text="vote" onClick={handleVote} />
             <Button text="next anecdote" onClick={handleClick} />
         </div>
