@@ -44,6 +44,7 @@ function App() {
             votes[a] > votes[b] ? a : b
         );
     };
+	
 
     return (
         <div>
