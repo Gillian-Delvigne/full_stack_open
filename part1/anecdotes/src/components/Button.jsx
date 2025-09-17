@@ -1,3 +1,3 @@
-export const Button = ({ onClick }) => (
-    <button onClick={onClick}>next anecdote</button>
+export const Button = ({ text, onClick }) => (
+    <button onClick={onClick}>{text}</button>
 );
