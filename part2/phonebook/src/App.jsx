@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { addNewPerson, getAllPersons } from "./service/person";
+import { addNewPerson, getAllPersons, deletePerson } from "./service/person";
 import { useState } from "react";
 import { Filter } from "./components/Filter";
 import { Form } from "./components/Form";
@@ -59,6 +59,17 @@ const App = () => {
         setFilter(event.target.value);
     };
 
+    const handleDeletion = (person) => {
+        if (window.confirm(`Do you want to delete ${person.name}?`)) {
+            deletePerson(person).then(() => {
+                const newList = persons.filter((p) => {
+                    return p.id !== person.id;
+                });
+                setPersons(newList);
+            });
+        }
+    };
+
     useEffect(() => {
         getAllPersons().then((persons) => setPersons(persons));
     }, []);
@@ -76,7 +87,7 @@ const App = () => {
                 handleNum={handleNum}
             />
             <h3>Numbers</h3>
-            <Persons persons={personsToShow} />
+            <Persons persons={personsToShow} handleDeletion={handleDeletion} />
         </div>
     );
 };

@@ -19,4 +19,13 @@ const addNewPerson = (person) => {
         .catch((error) => alert(error));
 };
 
-export { getAllPersons, addNewPerson };
+const deletePerson = (person) => {
+    const request = axios.delete(`${baseUrl}/${person.id}`);
+    return request
+        .then((response) => {
+            if (response.status === 200) return response;
+        })
+        .catch((error) => alert(error));
+};
+
+export { getAllPersons, addNewPerson, deletePerson };
