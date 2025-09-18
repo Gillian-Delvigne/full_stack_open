@@ -17,6 +17,15 @@ const App = () => {
           )
         : persons;
 
+    const addNewPerson = (person) => {
+        const request = axios.post("http://localhost:3001/persons", person);
+        return request
+            .then((response) => {
+                if (response.statusText === "Created") return response.data;
+            })
+            .catch((error) => alert(error));
+    };
+
     const handlePerson = (event) => {
         event.preventDefault();
         const duplicateName = persons.filter(
@@ -25,8 +34,10 @@ const App = () => {
         if (duplicateName.length)
             return alert(`${newName} is already added to phonebook`);
         if (!newNum.trim()) return alert("Please provide a valid phone number");
-        const contactList = [...persons, { name: newName, number: newNum }];
-        setPersons(contactList);
+        addNewPerson({ name: newName, number: newNum }).then((newPerson) => {
+            const contactList = [...persons, newPerson];
+            setPersons(contactList);
+        });
         setNewName("");
         setNewNum("");
     };
