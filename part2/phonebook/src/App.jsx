@@ -1,9 +1,10 @@
+import { useEffect } from "react";
+
+import { addNewPerson, getAllPersons } from "./service/person";
 import { useState } from "react";
 import { Filter } from "./components/Filter";
 import { Form } from "./components/Form";
 import { Persons } from "./components/Persons";
-import { useEffect } from "react";
-import axios from "axios";
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -17,29 +18,33 @@ const App = () => {
           )
         : persons;
 
-    const addNewPerson = (person) => {
-        const request = axios.post("http://localhost:3001/persons", person);
-        return request
-            .then((response) => {
-                if (response.statusText === "Created") return response.data;
-            })
-            .catch((error) => alert(error));
+    const handleFormError = () => {
+        const duplicateName = persons.filter(
+            (person) => person.name === newName
+        );
+        if (duplicateName.length) {
+            alert(`${newName} is already added to phonebook`);
+            return true;
+        }
+        if (!newNum.trim()) {
+            alert("Please provide a valid phone number");
+            return true;
+        }
+        return false;
     };
 
     const handlePerson = (event) => {
         event.preventDefault();
-        const duplicateName = persons.filter(
-            (person) => person.name === newName
-        );
-        if (duplicateName.length)
-            return alert(`${newName} is already added to phonebook`);
-        if (!newNum.trim()) return alert("Please provide a valid phone number");
-        addNewPerson({ name: newName, number: newNum }).then((newPerson) => {
-            const contactList = [...persons, newPerson];
-            setPersons(contactList);
-        });
-        setNewName("");
-        setNewNum("");
+        if (!handleFormError()) {
+            addNewPerson({ name: newName, number: newNum }).then(
+                (newPerson) => {
+                    const contactList = [...persons, newPerson];
+                    setPersons(contactList);
+                }
+            );
+            setNewName("");
+            setNewNum("");
+        }
     };
 
     const handleName = (event) => {
@@ -55,10 +60,7 @@ const App = () => {
     };
 
     useEffect(() => {
-        const promise = axios.get("http://localhost:3001/persons");
-        promise.then((response) => {
-            if (response.status === 200) setPersons(response.data);
-        });
+        getAllPersons().then((persons) => setPersons(persons));
     }, []);
 
     return (
