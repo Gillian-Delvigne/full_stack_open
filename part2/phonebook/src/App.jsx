@@ -6,9 +6,12 @@ const App = () => {
 
     const handlePerson = (event) => {
         event.preventDefault();
+        const duplicate = persons.filter((person) => person.name === newName);
+        if (duplicate.length)
+            return alert(`${newName} is already added to phonebook`);
         const contactList = [...persons, { name: newName }];
         setPersons(contactList);
-		setNewName("");
+        setNewName("");
     };
 
     const handleName = (event) => {
@@ -27,7 +30,9 @@ const App = () => {
                 </div>
             </form>
             <h2>Numbers</h2>
-           {persons.map(person => <p key={person.name}>{person.name}</p> )}
+            {persons.map((person) => (
+                <p key={person.name}>{person.name}</p>
+            ))}
         </div>
     );
 };
