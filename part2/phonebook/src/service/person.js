@@ -32,9 +32,8 @@ const deletePerson = (person) => {
     const request = axios.delete(`${baseUrl}/${person.id}`);
     return request
         .then((response) => {
-            if (response.status === 200) return response;
+            return response;
         })
-        .catch((error) => alert(error));
 };
 
 export { getAllPersons, addNewPerson, updatePerson, deletePerson };

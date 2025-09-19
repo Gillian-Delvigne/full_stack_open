@@ -10,18 +10,30 @@ import { useState } from "react";
 import { Filter } from "./components/Filter";
 import { Form } from "./components/Form";
 import { Persons } from "./components/Persons";
+import { Notification } from "./components/Notification";
 
 const App = () => {
     const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState("");
     const [newNum, setNewNum] = useState("");
     const [filter, setFilter] = useState("");
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [statusMessage, setStatusMessage] = useState("");
 
     const personsToShow = filter.trim()
         ? persons.filter((person) =>
               person.name.toLowerCase().includes(filter.toLowerCase())
           )
         : persons;
+
+    const handleNotification = (message, status) => {
+        setStatusMessage(status);
+        setErrorMessage(message);
+
+        setTimeout(() => {
+            setErrorMessage(null);
+        }, 5000);
+    };
 
     const handlePersonUpdate = () => {
         if (
@@ -41,6 +53,10 @@ const App = () => {
                             : person
                     )
                 )
+            );
+            handleNotification(
+                `${personToUpdate.name} was successfully updated`,
+                "success"
             );
             return true;
         }
@@ -63,7 +79,11 @@ const App = () => {
     const handlePerson = (event) => {
         event.preventDefault();
         let shouldReset = false;
-        if (!newNum.trim()) return alert("Please provide a valid phone number");
+        if (!newNum.trim())
+            return handleNotification(
+                "Please provide a valid phone number",
+                "error"
+            );
         if (isDuplicate(newName)) shouldReset = handlePersonUpdate();
         else {
             addNewPerson({ name: newName, number: newNum }).then(
@@ -71,6 +91,10 @@ const App = () => {
                     const contactList = [...persons, newPerson];
                     setPersons(contactList);
                     shouldReset = true;
+                    handleNotification(
+                        `${newPerson.name} was successfully added`,
+                        "success"
+                    );
                 }
             );
         }
@@ -91,12 +115,23 @@ const App = () => {
 
     const handleDeletion = (person) => {
         if (window.confirm(`Do you want to delete ${person.name}?`)) {
-            deletePerson(person).then(() => {
-                const newList = persons.filter((p) => {
-                    return p.id !== person.id;
-                });
-                setPersons(newList);
-            });
+            deletePerson(person)
+                .then(() => {
+                    const newList = persons.filter((p) => {
+                        return p.id !== person.id;
+                    });
+                    setPersons(newList);
+                    handleNotification(
+                        `${person.name} was successfully deleted`,
+                        "success"
+                    );
+                })
+                .catch(() =>
+                    handleNotification(
+                        `${person.name} has already been removed from the server`,
+                        "error"
+                    )
+                );
         }
     };
 
@@ -107,6 +142,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={errorMessage} status={statusMessage} />
             <Filter filter={filter} handleFilter={handleFilter} />
             <h3>Add a newk</h3>
             <Form
