@@ -19,6 +19,15 @@ const addNewPerson = (person) => {
         .catch((error) => alert(error));
 };
 
+const updatePerson = (person) => {
+    const request = axios.put(`${baseUrl}/${person.id}`, person);
+    return request
+        .then((response) => {
+            if (response.status === 200) return response.data;
+        })
+        .catch((error) => alert(error));
+};
+
 const deletePerson = (person) => {
     const request = axios.delete(`${baseUrl}/${person.id}`);
     return request
@@ -28,4 +37,4 @@ const deletePerson = (person) => {
         .catch((error) => alert(error));
 };
 
-export { getAllPersons, addNewPerson, deletePerson };
+export { getAllPersons, addNewPerson, updatePerson, deletePerson };

@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-import { addNewPerson, getAllPersons, deletePerson } from "./service/person";
+import {
+    addNewPerson,
+    getAllPersons,
+    updatePerson,
+    deletePerson,
+} from "./service/person";
 import { useState } from "react";
 import { Filter } from "./components/Filter";
 import { Form } from "./components/Form";
@@ -18,33 +23,58 @@ const App = () => {
           )
         : persons;
 
-    const handleFormError = () => {
-        const duplicateName = persons.filter(
-            (person) => person.name === newName
-        );
-        if (duplicateName.length) {
-            alert(`${newName} is already added to phonebook`);
-            return true;
-        }
-        if (!newNum.trim()) {
-            alert("Please provide a valid phone number");
+    const handlePersonUpdate = () => {
+        if (
+            window.confirm(
+                `${newName} is already added to phonebook, replace the old number with a new one?`
+            )
+        ) {
+            const personToUpdate = persons.find(
+                (person) => person.name === newName
+            );
+            personToUpdate.number = newNum;
+            updatePerson(personToUpdate).then(
+                setPersons(
+                    persons.map((person) =>
+                        person.id === personToUpdate.id
+                            ? personToUpdate
+                            : person
+                    )
+                )
+            );
             return true;
         }
         return false;
     };
 
+    const resetInputs = () => {
+        setNewName("");
+        setNewNum("");
+    };
+
+    const isDuplicate = (newName) => {
+        const duplicateName = persons.filter(
+            (person) => person.name === newName
+        );
+        if (duplicateName.length) return true;
+        return false;
+    };
+
     const handlePerson = (event) => {
         event.preventDefault();
-        if (!handleFormError()) {
+        let shouldReset = false;
+        if (!newNum.trim()) return alert("Please provide a valid phone number");
+        if (isDuplicate(newName)) shouldReset = handlePersonUpdate();
+        else {
             addNewPerson({ name: newName, number: newNum }).then(
                 (newPerson) => {
                     const contactList = [...persons, newPerson];
                     setPersons(contactList);
+                    shouldReset = true;
                 }
             );
-            setNewName("");
-            setNewNum("");
         }
+        if (shouldReset) resetInputs();
     };
 
     const handleName = (event) => {
