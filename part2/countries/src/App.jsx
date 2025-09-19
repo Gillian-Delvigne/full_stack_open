@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Form } from "./components/Form";
 import { Countries } from "./components/Countries";
@@ -8,17 +9,25 @@ import { getAllCountries } from "./service/countries";
 function App() {
     const [value, setValue] = useState("");
     const [countries, setCountries] = useState([]);
+    const [country, setCountry] = useState(null);
 
     const handleFieldValue = (event) => {
         event.preventDefault();
         setValue(event.target.value);
+        setCountry(null);
+    };
+
+    const handleClick = (country) => {
+        setCountry(
+            countries.find((c) => c.name.common === country.name.common)
+        );
     };
 
     useEffect(() => {
         getAllCountries().then((response) => setCountries(response));
     }, []);
 
-    const countriesToDisplay = countries.filter((country) => {
+    const countriesTodisplay = countries.filter((country) => {
         return country.name.common.toLowerCase().includes(value.toLowerCase());
     });
 
@@ -28,8 +37,11 @@ function App() {
 
             {value && (
                 <div>
-                    <Countries countries={countriesToDisplay} />
-                    <Country countries={countriesToDisplay} />
+                    <Countries
+                        countries={countriesTodisplay}
+                        handleClick={handleClick}
+                    />
+                    <Country countries={countriesTodisplay} country={country} />
                 </div>
             )}
         </div>

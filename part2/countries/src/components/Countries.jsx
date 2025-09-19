@@ -1,6 +1,4 @@
-import React from "react";
-
-export const Countries = ({ countries }) => {
+export const Countries = ({ countries, handleClick }) => {
     const numberOfCountries = countries.length;
 
     return (
@@ -11,7 +9,12 @@ export const Countries = ({ countries }) => {
                 <div>
                     {countries.map((country) => {
                         return (
-                            <li key={country.cca2}>{country.name.common}</li>
+                            <li key={country.cca2}>
+                                {country.name.common}{" "}
+                                <button onClick={() => handleClick(country)}>
+                                    Show
+                                </button>
+                            </li>
                         );
                     })}
                 </div>
