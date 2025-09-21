@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-const api_key = import.meta.env.VITE_WEATHER_API_KEY
 
 import { Form } from "./components/Form";
 import { Countries } from "./components/Countries";
 import { Country } from "./components/Country";
 import { getAllCountries } from "./service/countries";
+import { getCountryWeather } from "./service/weather";
 
 function App() {
     const [value, setValue] = useState("");
@@ -22,6 +20,7 @@ function App() {
     };
 
     const handleClick = (country) => {
+        setWeather(null);
         setCountry(
             countries.find((c) => c.name.common === country.name.common)
         );
@@ -38,17 +37,8 @@ function App() {
     useEffect(() => {
         if (!country && countriesTodisplay.length !== 1) return;
         const target = country ? country : countriesTodisplay[0];
-
-
         if (!weather) {
-            axios
-                .get(
-                    `https://api.openweathermap.org/data/3.0/onecall?lat=${target.latlng[0]}&lon=${target.latlng[1]}&exclude=minutely,hourly,daily,alerts&units=metric&appid=${api_key}`
-                )
-                .then((response) => {
-                    setWeather(response.data);
-                })
-                .catch((error) => alert(error));
+            getCountryWeather(target).then((response) => setWeather(response));
         }
     }, [countriesTodisplay, country]);
 
