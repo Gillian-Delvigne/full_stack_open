@@ -1,6 +1,5 @@
-
-export const Country = ({ countries, country }) => {
-	const target = country ? country : countries[0];
+export const Country = ({ countries, country, weather }) => {
+    const target = country ? country : countries[0];
 
     return (
         <>
@@ -11,15 +10,25 @@ export const Country = ({ countries, country }) => {
                     <p>Area {target.area}</p>
                     <h2>Languages</h2>
                     <ul>
-                        {Object.values(target.languages).map(
-                            (language) => (
-                                <li key={language}>{language}</li>
-                            )
-                        )}
+                        {Object.values(target.languages).map((language) => (
+                            <li key={language}>{language}</li>
+                        ))}
                     </ul>
                     <div>
-                        <img src={target.flags.svg} alt="" />
+                        <img
+                            style={{ width: "200px" }}
+                            src={target.flags.svg}
+                            alt=""
+                        />
                     </div>
+                    { weather &&
+                        <div>
+                            <h2>Weather in {target.capital[0]}</h2>
+                            <p>Temperature {weather.current.temp}° Celsius</p>
+							<img src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`} alt="" />
+							<p>Wind {weather.current.wind_speed} m/s</p>
+                        </div>
+                    }
                 </div>
             )}
         </>
