@@ -19,6 +19,7 @@ const App = () => {
     const [filter, setFilter] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
     const [statusMessage, setStatusMessage] = useState("");
+   // const [shouldReset, setShouldReset] = useState(false);
 
     const personsToShow = filter.trim()
         ? persons.filter((person) =>
@@ -54,6 +55,7 @@ const App = () => {
                     )
                 )
             );
+			resetInputs();
             handleNotification(
                 `${personToUpdate.name} was successfully updated`,
                 "success"
@@ -78,19 +80,19 @@ const App = () => {
 
     const handlePerson = (event) => {
         event.preventDefault();
-        let shouldReset = false;
         if (!newNum.trim())
             return handleNotification(
                 "Please provide a valid phone number",
                 "error"
             );
-        if (isDuplicate(newName)) shouldReset = handlePersonUpdate();
+        if (isDuplicate(newName)) handlePersonUpdate();
         else {
+			resetInputs();
+			//setShouldReset(true);
             addNewPerson({ name: newName, number: newNum }).then(
                 (newPerson) => {
                     const contactList = [...persons, newPerson];
                     setPersons(contactList);
-                    shouldReset = true;
                     handleNotification(
                         `${newPerson.name} was successfully added`,
                         "success"
@@ -98,8 +100,11 @@ const App = () => {
                 }
             );
         }
-        if (shouldReset) resetInputs();
     };
+
+    // useEffect(() => {
+    //     if (shouldReset) resetInputs();
+    // }, [shouldReset]);
 
     const handleName = (event) => {
         setNewName(event.target.value);
@@ -117,9 +122,7 @@ const App = () => {
         if (window.confirm(`Do you want to delete ${person.name}?`)) {
             deletePerson(person)
                 .then(() => {
-                    const newList = persons.filter((p) => {
-                        return p.id !== person.id;
-                    });
+                    const newList = persons.filter((p) => p.id !== person.id);
                     setPersons(newList);
                     handleNotification(
                         `${person.name} was successfully deleted`,
@@ -144,7 +147,7 @@ const App = () => {
             <h2>Phonebook</h2>
             <Notification message={errorMessage} status={statusMessage} />
             <Filter filter={filter} handleFilter={handleFilter} />
-            <h3>Add a newk</h3>
+            <h3>Add a new</h3>
             <Form
                 handlePerson={handlePerson}
                 newName={newName}

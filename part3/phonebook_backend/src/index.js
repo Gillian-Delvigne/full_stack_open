@@ -62,13 +62,22 @@ app.post("/api/persons", (request, response) => {
     response.json(person);
 });
 
+app.put("/api/persons/:id", (request, response) => {
+	 const index = data.persons.findIndex(
+        (person) => person.id === request.params.id
+    );
+    if (index) {
+		const newPerson = request.body;
+		data.persons[index] = newPerson;
+	}
+})
+
 app.delete("/api/persons/:id", (request, response) => {
     const person = data.persons.find(
         (person) => person.id === request.params.id
     );
     if (person) {
         data.persons = data.persons.filter((p) => p.id !== person.id);
-        console.log(data.persons);
         response.status(204).end();
     } else response.status(404).end();
 });
