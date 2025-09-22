@@ -1,10 +1,20 @@
 const express = require("express");
+const morgan = require("morgan");
 
 const data = require("./data");
-
 const app = express();
 
 app.use(express.json());
+
+app.use(morgan(':method :url :status :response-time ms', {
+  skip: (req) => req.method === 'POST'
+}));
+
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(morgan(':method :url :status :response-time ms :body', {
+  skip: (req) => req.method !== 'POST'
+}));
+
 
 app.get("/info", (request, response) => {
     const timestamp = Date();
