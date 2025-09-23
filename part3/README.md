@@ -1,3 +1,3 @@
 # Vercel deployment
 
-https://phonebook-backend-kulh3xovu-gilliandelvignes-projects.vercel.app/
+https://phonebook-backend-rust.vercel.app/
