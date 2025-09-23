@@ -19,7 +19,6 @@ const App = () => {
     const [filter, setFilter] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
     const [statusMessage, setStatusMessage] = useState("");
-   // const [shouldReset, setShouldReset] = useState(false);
 
     const personsToShow = filter.trim()
         ? persons.filter((person) =>
