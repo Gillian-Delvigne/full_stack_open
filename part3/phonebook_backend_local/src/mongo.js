@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 if (process.argv.length === 3 || process.argv.length === 5) {
     const password = process.argv[2];
-    const url = `mongodb+srv://gillian_db:${password}@cluster0.h05vttv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+    const url = `mongodb+srv://gillian_db:${password}@cluster0.h05vttv.mongodb.net/Phonebook?retryWrites=true&w=majority&appName=Cluster0`;
     mongoose.set("strictQuery", false);
     mongoose.connect(url);
 
