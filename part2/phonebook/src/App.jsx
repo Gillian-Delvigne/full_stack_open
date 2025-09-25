@@ -45,16 +45,20 @@ const App = () => {
                 (person) => person.name === newName
             );
             personToUpdate.number = newNum;
-            updatePerson(personToUpdate).then(
-                setPersons(
-                    persons.map((person) =>
-                        person.id === personToUpdate.id
-                            ? personToUpdate
-                            : person
+            updatePerson(personToUpdate)
+                .then(
+                    setPersons(
+                        persons.map((person) =>
+                            person.id === personToUpdate.id
+                                ? personToUpdate
+                                : person
+                        )
                     )
                 )
-            );
-			resetInputs();
+                .catch((error) =>
+                    handleNotification(error.response.data.error, "error")
+                );
+            resetInputs();
             handleNotification(
                 `${personToUpdate.name} was successfully updated`,
                 "success"
@@ -86,19 +90,19 @@ const App = () => {
             );
         if (isDuplicate(newName)) handlePersonUpdate();
         else {
-			resetInputs();
-            addNewPerson({ name: newName, number: newNum }).then(
-                (newPerson) => {
+            resetInputs();
+            addNewPerson({ name: newName, number: newNum })
+                .then((newPerson) => {
                     const contactList = [...persons, newPerson];
                     setPersons(contactList);
                     handleNotification(
                         `${newPerson.name} was successfully added`,
                         "success"
                     );
-                }
-            ).catch(error => {
-				handleNotification(error.message, "error");
-			});
+                })
+                .catch((error) =>
+                    handleNotification(error.response.data.error, "error")
+                );
         }
     };
 
