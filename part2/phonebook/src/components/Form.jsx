@@ -17,5 +17,5 @@ export const Form = ({
         <button type="submit">add</button>
       </div>
     </form>
-  )
-}
+  );
+};

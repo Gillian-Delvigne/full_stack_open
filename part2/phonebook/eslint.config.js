@@ -1,9 +1,9 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import stylistic from '@stylistic/eslint-plugin'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -30,7 +30,7 @@ export default defineConfig([
       '@stylistic/js/indent': ['error', 2],
       '@stylistic/js/linebreak-style': ['error', 'unix'],
       '@stylistic/js/quotes': ['error', 'single'],
-      '@stylistic/js/semi': ['error', 'never'],
+      '@stylistic/js/semi': ['error', 'always'],
       eqeqeq: 'error',
       'no-trailing-spaces': 'error',
       'object-curly-spacing': ['error', 'always'],
@@ -39,4 +39,4 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-])
+]);

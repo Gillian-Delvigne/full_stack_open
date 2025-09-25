@@ -7,8 +7,8 @@ export const Persons = ({ persons, handleDeletion }) => {
             {person.name} {person.number}{' '}
             <button onClick={() => handleDeletion(person)}>delete</button>
           </p>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

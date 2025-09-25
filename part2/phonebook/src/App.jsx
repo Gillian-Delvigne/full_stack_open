@@ -1,39 +1,39 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 import {
   addNewPerson,
   getAllPersons,
   updatePerson,
   deletePerson,
-} from './service/person'
-import { useState } from 'react'
-import { Filter } from './components/Filter'
-import { Form } from './components/Form'
-import { Persons } from './components/Persons'
-import { Notification } from './components/Notification'
+} from './service/person';
+import { useState } from 'react';
+import { Filter } from './components/Filter';
+import { Form } from './components/Form';
+import { Persons } from './components/Persons';
+import { Notification } from './components/Notification';
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState('')
-  const [filter, setFilter] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [statusMessage, setStatusMessage] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNum, setNewNum] = useState('');
+  const [filter, setFilter] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [statusMessage, setStatusMessage] = useState('');
 
   const personsToShow = filter.trim()
     ? persons.filter((person) =>
       person.name.toLowerCase().includes(filter.toLowerCase())
     )
-    : persons
+    : persons;
 
   const handleNotification = (message, status) => {
-    setStatusMessage(status)
-    setErrorMessage(message)
+    setStatusMessage(status);
+    setErrorMessage(message);
 
     setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
-  }
+      setErrorMessage(null);
+    }, 5000);
+  };
 
   const handlePersonUpdate = () => {
     if (
@@ -43,8 +43,8 @@ const App = () => {
     ) {
       const personToUpdate = persons.find(
         (person) => person.name === newName
-      )
-      personToUpdate.number = newNum
+      );
+      personToUpdate.number = newNum;
       updatePerson(personToUpdate)
         .then(
           setPersons(
@@ -57,90 +57,90 @@ const App = () => {
         )
         .catch((error) =>
           handleNotification(error.response.data.error, 'error')
-        )
-      resetInputs()
+        );
+      resetInputs();
       handleNotification(
         `${personToUpdate.name} was successfully updated`,
         'success'
-      )
-      return true
+      );
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const resetInputs = () => {
-    setNewName('')
-    setNewNum('')
-  }
+    setNewName('');
+    setNewNum('');
+  };
 
   const isDuplicate = (newName) => {
     const duplicateName = persons.filter(
       (person) => person.name === newName
-    )
-    if (duplicateName.length) return true
-    return false
-  }
+    );
+    if (duplicateName.length) return true;
+    return false;
+  };
 
   const handlePerson = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (!newNum.trim())
       return handleNotification(
         'Please provide a valid phone number',
         'error'
-      )
-    if (isDuplicate(newName)) handlePersonUpdate()
+      );
+    if (isDuplicate(newName)) handlePersonUpdate();
     else {
-      resetInputs()
+      resetInputs();
       addNewPerson({ name: newName, number: newNum })
         .then((newPerson) => {
-          const contactList = [...persons, newPerson]
-          setPersons(contactList)
+          const contactList = [...persons, newPerson];
+          setPersons(contactList);
           handleNotification(
             `${newPerson.name} was successfully added`,
             'success'
-          )
+          );
         })
         .catch((error) =>
           handleNotification(error.response.data.error, 'error')
-        )
+        );
     }
-  }
+  };
 
   const handleName = (event) => {
-    setNewName(event.target.value)
-  }
+    setNewName(event.target.value);
+  };
 
   const handleNum = (event) => {
-    setNewNum(event.target.value)
-  }
+    setNewNum(event.target.value);
+  };
 
   const handleFilter = (event) => {
-    setFilter(event.target.value)
-  }
+    setFilter(event.target.value);
+  };
 
   const handleDeletion = (person) => {
     if (window.confirm(`Do you want to delete ${person.name}?`)) {
       deletePerson(person)
         .then(() => {
-          const newList = persons.filter((p) => p.id !== person.id)
-          setPersons(newList)
+          const newList = persons.filter((p) => p.id !== person.id);
+          setPersons(newList);
           handleNotification(
             `${person.name} was successfully deleted`,
             'success'
-          )
+          );
         })
         .catch(() =>
           handleNotification(
             `${person.name} has already been removed from the server`,
             'error'
           )
-        )
+        );
     }
-  }
+  };
 
   useEffect(() => {
-    getAllPersons().then((persons) => setPersons(persons))
-  }, [])
+    getAllPersons().then((persons) => setPersons(persons));
+  }, []);
 
   return (
     <div>
@@ -158,7 +158,7 @@ const App = () => {
       <h3>Numbers</h3>
       <Persons persons={personsToShow} handleDeletion={handleDeletion} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
