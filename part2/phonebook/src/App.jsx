@@ -4,7 +4,7 @@ import {
   addNewPerson,
   getAllPersons,
   updatePerson,
-  deletePerson,
+  deletePerson
 } from './service/person';
 import { useState } from 'react';
 import { Filter } from './components/Filter';

@@ -3,7 +3,7 @@ export const Form = ({
   newName,
   handleName,
   newNum,
-  handleNum,
+  handleNum
 }) => {
   return (
     <form onSubmit={handlePerson}>
