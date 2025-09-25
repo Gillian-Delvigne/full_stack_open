@@ -16,7 +16,6 @@ const addNewPerson = (person) => {
         .then((response) => {
             if (response.status === 200) return response.data;
         })
-        .catch((error) => alert(error));
 };
 
 const updatePerson = (person) => {

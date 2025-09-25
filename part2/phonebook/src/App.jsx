@@ -96,7 +96,9 @@ const App = () => {
                         "success"
                     );
                 }
-            );
+            ).catch(error => {
+				handleNotification(error.message, "error");
+			});
         }
     };
 
