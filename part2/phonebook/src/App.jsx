@@ -87,7 +87,6 @@ const App = () => {
         if (isDuplicate(newName)) handlePersonUpdate();
         else {
 			resetInputs();
-			//setShouldReset(true);
             addNewPerson({ name: newName, number: newNum }).then(
                 (newPerson) => {
                     const contactList = [...persons, newPerson];
@@ -100,10 +99,6 @@ const App = () => {
             );
         }
     };
-
-    // useEffect(() => {
-    //     if (shouldReset) resetInputs();
-    // }, [shouldReset]);
 
     const handleName = (event) => {
         setNewName(event.target.value);
